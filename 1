@@ -1,0 +1,30 @@
+<?php
+function getUserArticles($option)
+{
+    $user_id = $option['user_id'];
+    $article_id = $option['article_id'];
+
+    if($user_id and $article_id) {
+        $user    = User::getUser($user_id)        ? User::getUser($user_id)        : Exception('no_user_id');
+        $blog    = $user->blog                    ? $user->blog                    : Exception('no_blog');
+        $article = $blog->getArticle($article_id) ? $blog->getArticle($article_id) : Exception('no_article');
+        return $article ;
+    }
+    return null;
+}
+
+function Exception($exception_type){
+    switch ($exception_type){
+        case 'no_user_id':
+            throw new AlertException("查無此帳號!", '/');
+            break;
+        case 'no_blog':
+            throw new AlertException("帳號尚未有部落格!", '/');
+            break;
+        case 'no_article':
+            throw new AlertException("此帳號無此文章!", '/');
+    }
+    return null;
+}
+
+?>
