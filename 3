@@ -1,0 +1,60 @@
+<?php   
+
+interface freight {
+    function get_freight($company_coefficient,$weight);
+    function get_company_coefficient($company);
+}
+
+class taiwan implements freight{
+    function get_freight($company_coefficient,$weight){
+        $weight = floor($weight);
+        $freight = $company_coefficient[0] + $company_coefficient[1] * $weight ;
+        return $freight;
+    }
+    function get_company_coefficient($company){
+        switch ($company){
+            case '黑貓':
+                $company_coefficient[0] = 100;
+                $company_coefficient[1] = 10;
+                break;
+            case '郵局':
+                $company_coefficient[0] = 60;
+                $company_coefficient[1] = 10;
+                break;
+        }
+        return $company_coefficient;
+    }
+}
+class america implements freight{
+    function get_company_coefficient($company){
+        return [0,60];
+    }
+    function get_freight($company_coefficient,$weight){
+        $weight = floor($weight);
+        $freight = $company_coefficient[0] + $company_coefficient[1] * $weight ;
+        return $freight;
+    }
+}
+class china implements freight{
+    function get_freight($company_coefficient,$weight){
+        $weight = floor($weight);
+        $freight = $company_coefficient[0] + $company_coefficient[1] * $weight ;
+        return $freight;
+    }
+    function get_company_coefficient($company){
+        switch ($company){
+            case '黑貓':
+                $company_coefficient[0] = 200;
+                $company_coefficient[1] = 20;
+                break;
+            case '順風':
+                $company_coefficient[0] = 150;
+                $company_coefficient[1] = 30;
+                break;
+        }
+        return $company_coefficient;
+    }
+
+}
+
+?>
