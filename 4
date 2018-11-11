@@ -1,0 +1,90 @@
+<?php
+
+$A = '1*2*3+5*4-8/2';
+$result = solution($A);
+echo $result ;
+
+
+function solution($A){
+    $debug_mode = 0;
+    #check operator NaN
+    $input = $A ;
+    if (!check_reg_exp($input,$debug_mode)){
+        return 'NaN';
+    }
+    $arr_number = preg_split ('/[\-\+]/',$input);
+    $arr_operator = preg_split ('/[0-9\.\*\/]+/',$input);
+    foreach ($arr_number as $key=>$element){
+        $arr_number[$key]= get_element_number($element);
+        if($arr_number[$key]=='NaN'){
+            return 'NaN';#if NaN ,exit funtion
+        }
+    }
+    return conduct_operation($arr_number,$arr_operator);
+    
+}
+
+function check_reg_exp($input,$debug_mode){
+    $pattern = '/[^0-9\+\-\*\/\.]/';
+    if (preg_match($pattern,$input)){
+        if($debug_mode){
+            echo 1;
+        }
+        return 0;
+    }
+    $pattern = '/[\+\-\*\/\.]{2,}/';
+    if (preg_match($pattern,$input)){
+        if($debug_mode){
+            echo 2;
+        }
+        return 0;
+    }
+    $pattern = '/[\.][\d]+[\.]/';
+    if (preg_match($pattern,$input)){
+        if($debug_mode){
+            echo 3;
+        }
+        return 0;
+    }
+    $pattern = '/[\+\-\*\/\.]\B/';
+    if (preg_match($pattern,$input)){
+        if($debug_mode){
+            echo 4;
+        }
+        return 0;
+    }
+    return 1;
+}
+
+function get_element_number($element_string){
+    $arr_number = preg_split ('/[\*\/]/',$element_string);
+    $arr_operator = preg_split ('/[0-9\.]+/',$element_string);
+    return conduct_operation($arr_number,$arr_operator);
+}
+function conduct_operation($arr_number,$arr_operator){
+    $result = $arr_number[0];
+    $i = 1;
+    while(isset($arr_number[$i])){
+        switch ($arr_operator[$i]){
+            case '+':
+                $result = $result + $arr_number[$i];
+                break;
+            case '-':
+                $result = $result - $arr_number[$i];
+                break;
+            case '*':
+                $result = $result * $arr_number[$i];
+                break;
+            case '/':
+                if($arr_number[$i]){
+                    $result = $result /$arr_number[$i];
+                }else{
+                    return 'NaN';
+                }
+                break;
+        }
+        $i = $i +1;
+    }
+    return $result;
+}
+?>
