@@ -1,4 +1,8 @@
 <?php
+
+$map = '1111111\n1000001\n10S1001\n1001001\n10000E1\n1000001\n1111111';
+echo solution($map);
+
 function solution($map){
     $input = $map ;
     #split map to array
@@ -26,8 +30,22 @@ function solution($map){
     $now_map = arr_str_replace('1','X',$now_map);
     $now_map = arr_str_replace('E','0',$now_map);
     $now_map = arr_str_replace('S','0',$now_map);
+    #set for stop count
+    $map_before_change = $now_map;
+    $try_time_limit = max(count($map_size),count($map_size[0]))*3;
+    $times = 0 ;
     foreach($GLOBALS['point_list_to_do'] as $start_point){
-        count_step($start_point,$now_map,$map_size);
+        $now_map = count_step($start_point,$now_map,$map_size);
+        if($map_before_change==$now_map){
+            $times = $times +1 ;
+            #check if try times greater than limit times
+            if($try_time_limit<= $times){
+                break;
+            }
+        }else{
+            $times = 0;
+            $map_before_change = $now_map;
+        }
     }
     return get_final_number($now_map,$end_point);
 }
@@ -62,23 +80,29 @@ function count_step($start_point,$now_map,$map_size){
             $start_y = $start_point[1];
             switch($start_point[2]){
                 case 1:
-                    $now_map[$start_x-1][$start_y]=($now_map[$start_x-1][$start_y]>$now_map[$start_x][$start_y]+1||$now_map[$start_x][$start_y]==0)?($now_map[$start_x][$start_y]+1):($now_map[$start_x-1][$start_y]);
-                break;
+                    $now_map[$start_x-1][$start_y]=($now_map[$start_x-1][$start_y]>$now_map[$start_x][$start_y]+1||$now_map[$start_x-1][$start_y]==0)?($now_map[$start_x][$start_y]+1):($now_map[$start_x-1][$start_y]);
+                    /*if($now_map[$start_x-1][$start_y]==0){
+                        $now_map[$start_x-1][$start_y]=$now_map[$start_x][$start_y]+1;
+                    }elseif($now_map[$start_x-1][$start_y]>$now_map[$start_x][$start_y]+1){
+                        $now_map[$start_x-1][$start_y]=$now_map[$start_x][$start_y]+1;
+                    }*/
+                    break;
                 case 2:
-                    $now_map[$start_x][$start_y+1]=($now_map[$start_x][$start_y+1]>$now_map[$start_x][$start_y]+1||$now_map[$start_x][$start_y]==0)?($now_map[$start_x][$start_y]+1):($now_map[$start_x][$start_y+1]);
-                break;
+                    $now_map[$start_x][$start_y+1]=($now_map[$start_x][$start_y+1]>$now_map[$start_x][$start_y]+1||$now_map[$start_x][$start_y+1]==0)?($now_map[$start_x][$start_y]+1):($now_map[$start_x][$start_y+1]);
+                    break;
                 case 3:
-                    $now_map[$start_x+1][$start_y]=($now_map[$start_x+1][$start_y]>$now_map[$start_x][$start_y]+1||$now_map[$start_x][$start_y]==0)?($now_map[$start_x][$start_y]+1):($now_map[$start_x+1][$start_y]);
-                break;
+                    $now_map[$start_x+1][$start_y]=($now_map[$start_x+1][$start_y]>$now_map[$start_x][$start_y]+1||$now_map[$start_x+1][$start_y]==0)?($now_map[$start_x][$start_y]+1):($now_map[$start_x+1][$start_y]);
+                    break;
                 case 4:                        
-                    $now_map[$start_x][$start_y-1]=($now_map[$start_x][$start_y-1]>$now_map[$start_x][$start_y]+1||$now_map[$start_x][$start_y]==0)?($now_map[$start_x][$start_y]+1):($now_map[$start_x][$start_y-1]);
-                break;                    
+                    $now_map[$start_x][$start_y-1]=($now_map[$start_x][$start_y-1]>$now_map[$start_x][$start_y]+1||$now_map[$start_x][$start_y-1]==0)?($now_map[$start_x][$start_y]+1):($now_map[$start_x][$start_y-1]);
+                    break;                    
             }
             reflash_point_list_to_do($start_point);
         }
     }
     #remove used point and vector
     array_shift($GLOBALS['point_list_to_do']);
+    return $now_map;
 }
 function get_point_to_check($start_point){
     $point_to_check[0] = $start_point[0];
