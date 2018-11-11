@@ -1,0 +1,61 @@
+<?php
+
+$freight = get_freight($area,$company,$weight);
+return $freight ;
+
+class freight{
+    function get_freight($area,$company,$weight){
+        switch ($area){
+            case 'America':
+                $fright = America_company($company,$weight);
+                return $fright;
+            case 'China':
+                $fright = China_company($company,$weight);
+                return $fright;
+            case 'Taiwan':
+                $fright = Taiwan_company($company,$weight);
+                return $fright;
+        }
+    }
+    function American_company($company,$weight){
+        $freight = 0;
+        $weight = floor($weight);
+        switch ($company){
+            case 'UPS':
+                $freight = 0 + $weight * 60 ;
+                break;                       
+        }
+        return $freight;            
+    }
+    function China_company($company,$weight){
+        $freight = 0;
+        $weight = floor($weight);
+        switch($company){
+            case '黑貓':
+                $freight = 200 + $weight * 20 ; 
+                break;
+            case '順風':
+                $freight = 150 + $weight * 30 ;
+                break;    
+        }
+        return $freight;
+    }
+    function Taiwan_company($company,$weight){
+        $freight = 0;
+        $weight = floor($weight);
+        switch($company){
+            case '黑貓':
+                $freight = 100 + $weight * 10 ; 
+                break;
+            case '郵局':
+                $freight =  60 + $weight * 20 ;
+                break;    
+        }
+        return $freight;
+    }
+    
+
+}
+
+
+?>
