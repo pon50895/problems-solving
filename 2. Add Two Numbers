@@ -18,6 +18,12 @@ class Solution {
     
     function addTwoNumbers($l1, $l2) {
         $sum = $this->get_decimal($l1) + $this->get_decimal($l2);
+        if($sum === 0)
+        {
+            $return->val = 0;
+            $return->next = null;
+            return $return;
+        }
         return $this->get_ListNode($sum);
     }
     
