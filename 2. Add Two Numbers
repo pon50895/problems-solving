@@ -1,0 +1,49 @@
+/**
+ * Definition for a singly-linked list.
+ * class ListNode {
+ *     public $val = 0;
+ *     public $next = null;
+ *     function __construct($val) { $this->val = $val; }
+ * }
+ */
+class Solution {
+
+    /**
+     * @param ListNode $l1
+     * @param ListNode $l2
+     * @return ListNode
+     */
+    private $l1;
+    private $l2;
+    
+    function addTwoNumbers($l1, $l2) {
+        $sum = $this->get_decimal($l1) + $this->get_decimal($l2);
+        return $this->get_ListNode($sum);
+    }
+    
+    function get_decimal($listnode)
+    {
+        $i = 0;
+        $return = 0;
+        while($listnode->next != null)
+        {
+            $return += 10 ** $i * $listnode->val;
+            $listnode = $listnode->next;
+            $i++;
+        }
+        $return += 10 ** $i * $listnode->val;
+        return $return ;
+    }
+    
+    function get_ListNode($sum)
+    {
+        if($sum != 0)
+        {
+            $return->val  = $sum % 10;
+            $return->next = ($sum - $return->val) / 10;
+            $return->next = $this->get_ListNode($return->next);
+        }
+        return $return;
+    }
+    
+}
